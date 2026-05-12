@@ -14,16 +14,23 @@ const LANGUAGE_FILE_EXT = {
 }
 
 function getCodeExportFilename(title, languageKey) {
-  const ext = LANGUAGE_FILE_EXT[languageKey] ?? 'txt'
-  const raw = (title || '').trim() || 'playground'
+  const ext = LANGUAGE_FILE_EXT[languageKey] ?? 'txt';
+  const raw = (title || '').trim() || 'playground';
+
   const safe =
     raw
-      .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '')
+      // Remove invalid filename characters and ASCII control characters
+      .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '')
+      // Replace spaces with hyphens
       .replace(/\s+/g, '-')
+      // Collapse multiple hyphens
       .replace(/-+/g, '-')
+      // Remove leading/trailing hyphens or dots
       .replace(/^[-.]+|[-.]+$/g, '')
-      .slice(0, 120) || 'playground'
-  return `${safe}.${ext}`
+      // Limit filename length
+      .slice(0, 120) || 'playground';
+
+  return `${safe}.${ext}`;
 }
 
 const selectStyles = {
