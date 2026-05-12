@@ -19,8 +19,12 @@ function getCodeExportFilename(title, languageKey) {
 
   const safe =
     raw
-      // Remove invalid filename characters and ASCII control characters
-      .replace(/[<>:"/\\|?*\u0000-\u001F]/g, '')
+      // Remove invalid filename characters
+      .replace(/[<>:"/\\|?*]/g, '')
+      // Remove ASCII control characters without using regex ranges
+      .split('')
+      .filter((char) => char.charCodeAt(0) >= 32)
+      .join('')
       // Replace spaces with hyphens
       .replace(/\s+/g, '-')
       // Collapse multiple hyphens
